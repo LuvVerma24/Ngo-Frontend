@@ -1,0 +1,105 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+.page {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid #334155;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 24px 0 12px;
+  color: #94a3b8;
+}
+
+input, select {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 14px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
+button {
+  background: #6366f1;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+button:hover {
+  background: #4f46e5;
+}
+
+button.secondary {
+  background: transparent;
+  color: #94a3b8;
+  text-decoration: underline;
+  padding: 8px 0;
+}
+
+button.secondary:hover {
+  background: transparent;
+  color: #cbd5e1;
+}
+
+.status-pending {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.status-visited {
+  color: #34d399;
+  font-weight: 600;
+}
+
+.message {
+  color: #f87171;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.form-row input, .form-row select {
+  margin-bottom: 0;
+}
