@@ -1,37 +1,80 @@
 * {
   box-sizing: border-box;
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: 'Segoe UI', system-ui, Arial, sans-serif;
 }
 
 body {
   margin: 0;
-  background: #0f172a;
-  color: #e2e8f0;
+  background: #0a0f0d;
+  color: #e5f2ec;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 24px 0;
+}
+
+.topbar h1 {
+  font-size: 22px;
+  margin: 0;
+  color: #e5f2ec;
+}
+
+.logout-btn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background: #b91c1c;
 }
 
 .page {
-  max-width: 600px;
-  margin: 40px auto;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-narrow {
+  max-width: 480px;
+  margin: 60px auto;
   padding: 24px;
 }
 
 .card {
-  background: #1e293b;
+  background: #12201a;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 16px;
-  border: 1px solid #334155;
+  border: 1px solid #1f3a2c;
+}
+
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
 h1 {
   font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  color: #e5f2ec;
 }
 
 h2 {
-  font-size: 18px;
+  font-size: 17px;
   margin: 24px 0 12px;
-  color: #94a3b8;
+  color: #6ee7b7;
 }
 
 input, select {
@@ -39,43 +82,50 @@ input, select {
   width: 100%;
   padding: 10px 12px;
   margin-bottom: 12px;
-  background: #0f172a;
-  border: 1px solid #334155;
+  background: #0a0f0d;
+  border: 1px solid #1f3a2c;
   border-radius: 6px;
-  color: #e2e8f0;
+  color: #e5f2ec;
   font-size: 14px;
 }
 
 input:focus, select:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: #22c55e;
+}
+
+input[type="file"] {
+  padding: 8px;
+  font-size: 13px;
+  color: #a7c4b8;
 }
 
 button {
-  background: #6366f1;
+  background: #16a34a;
   color: white;
   border: none;
   padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 button:hover {
-  background: #4f46e5;
+  background: #15803d;
 }
 
 button.secondary {
   background: transparent;
-  color: #94a3b8;
+  color: #6ee7b7;
   text-decoration: underline;
   padding: 8px 0;
+  font-weight: 400;
 }
 
 button.secondary:hover {
   background: transparent;
-  color: #cbd5e1;
+  color: #a7f3d0;
 }
 
 .status-pending {
@@ -98,8 +148,26 @@ button.secondary:hover {
   display: flex;
   gap: 8px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .form-row input, .form-row select {
   margin-bottom: 0;
+  flex: 1;
+  min-width: 140px;
+}
+
+.proof-photo {
+  width: 100%;
+  max-width: 220px;
+  border-radius: 8px;
+  margin-top: 10px;
+  display: block;
+}
+
+.loading-msg {
+  text-align: center;
+  color: #a7c4b8;
+  margin-top: 60px;
+  font-size: 15px;
 }

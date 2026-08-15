@@ -9,11 +9,13 @@ function VolunteerDashboard() {
   const [counts, setCounts] = useState({});
   const [photos, setPhotos] = useState({});
   const token = localStorage.getItem('token');
+  const name = localStorage.getItem('name');
   const navigate = useNavigate();
 
   function handleLogout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('name');
     navigate('/');
   }
 
@@ -31,8 +33,7 @@ function VolunteerDashboard() {
         if (data.areas) {
           setAreas(data.areas);
         } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('role');
+          localStorage.clear();
           navigate('/');
         }
       });
@@ -55,9 +56,7 @@ function VolunteerDashboard() {
 
     fetch(`${API_URL}/api/areas/${areaId}/visit`, {
       method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`
-      },
+      headers: { Authorization: `Bearer ${token}` },
       body: formData
     })
       .then(res => res.json())
@@ -66,46 +65,53 @@ function VolunteerDashboard() {
       });
   }
 
-  if (!areas) return <div className="page"><p>Loading... (may take up to 30s if server was idle)</p></div>;
+  if (!areas) return <p className="loading-msg">Loading... (may take up to 30s if server was idle)</p>;
 
   return (
-    <div className="page">
-      <h1>My Assigned Areas</h1>
-      <button onClick={handleLogout} className="secondary">Logout</button>
-      {areas.length === 0 && <div className="card"><p>No areas assigned yet.</p></div>}
+    <>
+      <div className="topbar">
+        <h1>{name ? `${name}'s Dashboard` : 'My Dashboard'}</h1>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
+      </div>
 
-      {areas.map(area => (
-        <div key={area._id} className="card">
-          <p><strong>Address:</strong> {area.address}</p>
-          <p>
-            Status:{' '}
-            <span className={area.lastVisitedDate ? 'status-visited' : 'status-pending'}>
-              {area.lastVisitedDate ? 'Visited' : 'Pending'}
-            </span>
-          </p>
+      <div className="page">
+        {areas.length === 0 && <div className="card"><p>No areas assigned yet.</p></div>}
 
-          {area.visitProofPhoto && (
-            <img src={area.visitProofPhoto} alt="Visit proof" style={{ width: '150px', borderRadius: '8px', marginTop: '8px' }} />
-          )}
+        <div className="area-grid">
+          {areas.map(area => (
+            <div key={area._id} className="card">
+              <p><strong>Address:</strong> {area.address}</p>
+              <p>
+                Status:{' '}
+                <span className={area.lastVisitedDate ? 'status-visited' : 'status-pending'}>
+                  {area.lastVisitedDate ? 'Visited' : 'Pending'}
+                </span>
+              </p>
 
-          {!area.lastVisitedDate && (
-            <div>
-              <input
-                type="number"
-                placeholder="Number of old people"
-                onChange={(e) => handleCountChange(area._id, e.target.value)}
-              />
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/jpg"
-                onChange={(e) => handlePhotoChange(area._id, e.target.files[0])}
-              />
-              <button onClick={() => submitVisit(area._id)}>Submit Visit</button>
+              {area.visitProofPhoto && (
+                <img src={area.visitProofPhoto} alt="Visit proof" className="proof-photo" />
+              )}
+
+              {!area.lastVisitedDate && (
+                <div className="form-row" style={{ marginTop: '10px' }}>
+                  <input
+                    type="number"
+                    placeholder="Number of old people"
+                    onChange={(e) => handleCountChange(area._id, e.target.value)}
+                  />
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/jpg"
+                    onChange={(e) => handlePhotoChange(area._id, e.target.files[0])}
+                  />
+                  <button onClick={() => submitVisit(area._id)}>Submit Visit</button>
+                </div>
+              )}
             </div>
-          )}
+          ))}
         </div>
-      ))}
-    </div>
+      </div>
+    </>
   );
 }
 

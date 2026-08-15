@@ -13,11 +13,9 @@ function LoginForm() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Runs ONCE when this page loads - checks if a token already exists
   useEffect(() => {
     const existingToken = localStorage.getItem('token');
     const existingRole = localStorage.getItem('role');
-
     if (existingToken && existingRole) {
       navigate(existingRole === 'manager' ? '/manager' : '/volunteer');
     }
@@ -51,6 +49,7 @@ function LoginForm() {
         if (data.token) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('role', data.user.role);
+          localStorage.setItem('name', data.user.name);
           navigate(data.user.role === 'manager' ? '/manager' : '/volunteer');
         } else {
           setMessage(data.message);
@@ -60,7 +59,7 @@ function LoginForm() {
 
   if (isRegistering) {
     return (
-      <div className="page">
+      <div className="page-narrow">
         <div className="card">
           <h1>Register</h1>
           <form onSubmit={handleRegister}>
@@ -83,7 +82,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="page">
+    <div className="page-narrow">
       <div className="card">
         <h1>Login</h1>
         <form onSubmit={handleLogin}>

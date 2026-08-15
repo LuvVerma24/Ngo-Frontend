@@ -10,11 +10,13 @@ function ManagerDashboard() {
   const [newAddress, setNewAddress] = useState('');
   const [selectedVolunteer, setSelectedVolunteer] = useState({});
   const token = localStorage.getItem('token');
+  const name = localStorage.getItem('name');
   const navigate = useNavigate();
 
   function handleLogout() {
     localStorage.removeItem('token');
     localStorage.removeItem('role');
+    localStorage.removeItem('name');
     navigate('/');
   }
 
@@ -32,8 +34,7 @@ function ManagerDashboard() {
         if (data.areas) {
           setAreas(data.areas);
         } else {
-          localStorage.removeItem('token');
-          localStorage.removeItem('role');
+          localStorage.clear();
           navigate('/');
         }
       });
@@ -81,53 +82,59 @@ function ManagerDashboard() {
       });
   }
 
-  if (!areas) return <div className="page"><p>Loading... (may take up to 30s if server was idle)</p></div>;
+  if (!areas) return <p className="loading-msg">Loading... (may take up to 30s if server was idle)</p>;
 
   return (
-    <div className="page">
-      <h1>Manager Dashboard</h1>
-      <button onClick={handleLogout} className="secondary">Logout</button>
-
-      <div className="card">
-        <form onSubmit={handleCreateArea} className="form-row">
-          <input
-            value={newAddress}
-            onChange={(e) => setNewAddress(e.target.value)}
-            placeholder="New area address"
-          />
-          <button type="submit">Create Area</button>
-        </form>
+    <>
+      <div className="topbar">
+        <h1>{name ? `${name}'s Dashboard` : 'Manager Dashboard'}</h1>
+        <button className="logout-btn" onClick={handleLogout}>Logout</button>
       </div>
 
-      <h2>All Areas</h2>
-      {areas.map(area => (
-        <div key={area._id} className="card">
-          <p><strong>Address:</strong> {area.address}</p>
-          <p>
-            Status:{' '}
-            <span className={area.lastVisitedDate ? 'status-visited' : 'status-pending'}>
-              {area.lastVisitedDate ? 'Visited' : 'Pending'}
-            </span>
-          </p>
-          <p><strong>Assigned to:</strong> {area.assignedTo ? area.assignedTo.name : 'Unassigned'}</p>
-          {area.visitProofPhoto && (
-            <img src={area.visitProofPhoto} alt="Visit proof" style={{ width: '150px', borderRadius: '8px', marginTop: '8px' }} />
-          )}
-
-          {!area.assignedTo && (
-            <div className="form-row">
-              <select onChange={(e) => handleVolunteerSelect(area._id, e.target.value)}>
-                <option value="">-- Select Volunteer --</option>
-                {volunteers.map(v => (
-                  <option key={v._id} value={v._id}>{v.name}</option>
-                ))}
-              </select>
-              <button onClick={() => assignVolunteer(area._id)}>Assign</button>
-            </div>
-          )}
+      <div className="page">
+        <div className="card">
+          <form onSubmit={handleCreateArea} className="form-row">
+            <input
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+              placeholder="New area address"
+            />
+            <button type="submit">Create Area</button>
+          </form>
         </div>
-      ))}
-    </div>
+
+        <h2>All Areas</h2>
+        <div className="area-grid">
+          {areas.map(area => (
+            <div key={area._id} className="card">
+              <p><strong>Address:</strong> {area.address}</p>
+              <p>
+                Status:{' '}
+                <span className={area.lastVisitedDate ? 'status-visited' : 'status-pending'}>
+                  {area.lastVisitedDate ? 'Visited' : 'Pending'}
+                </span>
+              </p>
+              <p><strong>Assigned to:</strong> {area.assignedTo ? area.assignedTo.name : 'Unassigned'}</p>
+              {area.visitProofPhoto && (
+                <img src={area.visitProofPhoto} alt="Visit proof" className="proof-photo" />
+              )}
+
+              {!area.assignedTo && (
+                <div className="form-row" style={{ marginTop: '10px' }}>
+                  <select onChange={(e) => handleVolunteerSelect(area._id, e.target.value)}>
+                    <option value="">-- Select Volunteer --</option>
+                    {volunteers.map(v => (
+                      <option key={v._id} value={v._id}>{v.name}</option>
+                    ))}
+                  </select>
+                  <button onClick={() => assignVolunteer(area._id)}>Assign</button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   );
 }
 
