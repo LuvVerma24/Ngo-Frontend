@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -9,6 +10,13 @@ function ManagerDashboard() {
   const [newAddress, setNewAddress] = useState('');
   const [selectedVolunteer, setSelectedVolunteer] = useState({});
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/');
+  }
 
   useEffect(() => {
     fetch(`${API_URL}/api/areas`, {
@@ -65,6 +73,7 @@ function ManagerDashboard() {
   return (
     <div className="page">
       <h1>Manager Dashboard</h1>
+      <button onClick={handleLogout} className="secondary">Logout</button>
 
       <div className="card">
         <form onSubmit={handleCreateArea} className="form-row">
@@ -88,9 +97,10 @@ function ManagerDashboard() {
             </span>
           </p>
           <p><strong>Assigned to:</strong> {area.assignedTo ? area.assignedTo.name : 'Unassigned'}</p>
-           {area.visitProofPhoto && (
+          {area.visitProofPhoto && (
             <img src={area.visitProofPhoto} alt="Visit proof" style={{ width: '150px', borderRadius: '8px', marginTop: '8px' }} />
-             )}
+          )}
+
           {!area.assignedTo && (
             <div className="form-row">
               <select onChange={(e) => handleVolunteerSelect(area._id, e.target.value)}>

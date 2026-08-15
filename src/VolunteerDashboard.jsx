@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -8,6 +9,13 @@ function VolunteerDashboard() {
   const [counts, setCounts] = useState({});
   const [photos, setPhotos] = useState({});
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/');
+  }
 
   useEffect(() => {
     fetch(`${API_URL}/api/areas`, {
@@ -50,6 +58,7 @@ function VolunteerDashboard() {
   return (
     <div className="page">
       <h1>My Assigned Areas</h1>
+      <button onClick={handleLogout} className="secondary">Logout</button>
       {areas.length === 0 && <div className="card"><p>No areas assigned yet.</p></div>}
 
       {areas.map(area => (
