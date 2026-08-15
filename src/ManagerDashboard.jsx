@@ -88,7 +88,9 @@ function ManagerDashboard() {
             </span>
           </p>
           <p><strong>Assigned to:</strong> {area.assignedTo ? area.assignedTo.name : 'Unassigned'}</p>
-
+           {area.visitProofPhoto && (
+            <img src={area.visitProofPhoto} alt="Visit proof" style={{ width: '150px', borderRadius: '8px', marginTop: '8px' }} />
+             )}
           {!area.assignedTo && (
             <div className="form-row">
               <select onChange={(e) => handleVolunteerSelect(area._id, e.target.value)}>

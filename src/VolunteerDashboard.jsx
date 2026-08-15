@@ -6,6 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 function VolunteerDashboard() {
   const [areas, setAreas] = useState(null);
   const [counts, setCounts] = useState({});
+  const [photos, setPhotos] = useState({});
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -20,14 +21,23 @@ function VolunteerDashboard() {
     setCounts({ ...counts, [areaId]: value });
   }
 
+  function handlePhotoChange(areaId, file) {
+    setPhotos({ ...photos, [areaId]: file });
+  }
+
   function submitVisit(areaId) {
+    const formData = new FormData();
+    formData.append('oldPeopleCount', counts[areaId]);
+    if (photos[areaId]) {
+      formData.append('photo', photos[areaId]);
+    }
+
     fetch(`${API_URL}/api/areas/${areaId}/visit`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ oldPeopleCount: counts[areaId] })
+      body: formData
     })
       .then(res => res.json())
       .then(data => {
@@ -52,12 +62,21 @@ function VolunteerDashboard() {
             </span>
           </p>
 
+          {area.visitProofPhoto && (
+            <img src={area.visitProofPhoto} alt="Visit proof" style={{ width: '150px', borderRadius: '8px', marginTop: '8px' }} />
+          )}
+
           {!area.lastVisitedDate && (
-            <div className="form-row">
+            <div>
               <input
                 type="number"
                 placeholder="Number of old people"
                 onChange={(e) => handleCountChange(area._id, e.target.value)}
+              />
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/jpg"
+                onChange={(e) => handlePhotoChange(area._id, e.target.files[0])}
               />
               <button onClick={() => submitVisit(area._id)}>Submit Visit</button>
             </div>
