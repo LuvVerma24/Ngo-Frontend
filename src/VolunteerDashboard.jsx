@@ -18,11 +18,24 @@ function VolunteerDashboard() {
   }
 
   useEffect(() => {
+    if (!token) {
+      navigate('/');
+      return;
+    }
+
     fetch(`${API_URL}/api/areas`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
-      .then(data => setAreas(data.areas));
+      .then(data => {
+        if (data.areas) {
+          setAreas(data.areas);
+        } else {
+          localStorage.removeItem('token');
+          localStorage.removeItem('role');
+          navigate('/');
+        }
+      });
   }, []);
 
   function handleCountChange(areaId, value) {
@@ -53,7 +66,7 @@ function VolunteerDashboard() {
       });
   }
 
-  if (!areas) return <div className="page"><p>Loading...</p></div>;
+  if (!areas) return <div className="page"><p>Loading... (may take up to 30s if server was idle)</p></div>;
 
   return (
     <div className="page">
