@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 
@@ -12,6 +12,16 @@ function LoginForm() {
   const [role, setRole] = useState('volunteer');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+
+  // Runs ONCE when this page loads - checks if a token already exists
+  useEffect(() => {
+    const existingToken = localStorage.getItem('token');
+    const existingRole = localStorage.getItem('role');
+
+    if (existingToken && existingRole) {
+      navigate(existingRole === 'manager' ? '/manager' : '/volunteer');
+    }
+  }, []);
 
   function handleRegister(event) {
     event.preventDefault();
